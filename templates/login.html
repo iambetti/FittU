@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">Login</h1>
+
+            <form action="/login" method="Post">
+                <input type="text" name="username" placeholder="Username">
+                <input type="text" name="password" placeholder="Password">
+                <input type="submit" value="login">
+            </form>
+
+
+        </div>
+    </div>
+</header>
+
+{% endblock %}
