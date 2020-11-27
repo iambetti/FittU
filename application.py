@@ -1,17 +1,29 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_assets import Environment, Bundle
+import hashlib
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+app.secret_key = "sasjdn214jnxc2mf039"
+assets = Environment(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
+js = Bundle('./javascript/script.js',
+            output='gen/scripts.js')
+assets.register('js_all', js)
+
+css = Bundle('./css/styles.css',
+            output='gen/styles.css')
+assets.register('css_all', css)
+
 class User( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(100))
-    lname = db.Column(db.String(100))l
+    lname = db.Column(db.String(100))
     bio = db.Column(db.Text())
     picture = db.Column(db.String(100))
     username = db.Column(db.String(10))
@@ -100,11 +112,48 @@ class Review( db.Model ):
         self.booking = booking
 
 
+# Main Routes
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+
+    if request.method == "Post":
+        username = request.form.get("username", "get")
+        password = request.form.get("password", "get")
+
+        user = User.query.filter_by( username = username, password = password ).first()
+
+        if user is not None:
+            session[ 'username' ] = username
+
+            return redirect("dashboard.html")
+        else:
+            return redirect("/login")
+
+    else:
+        return render_template("login.html")
+
+@app.route("/signup")
+def register():
+    return render_template("register.html")
+
+@app.route("/dashboard")
+def dashboard():
+
+    if checkLogin():
+
+        user = User.query.filter_by( username = session[ 'username' ] ).first()
+        return render_template("dashboard", user = user)
+
+def checkLogin():
+    if 'user' in session:
+        return True
+    else:
+        return redirect("/login")
 
 # CRUDI - Users Controller
 
