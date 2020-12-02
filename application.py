@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import hashlib
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
 app.secret_key = "sasjdn214jnxc2mf039"
 assets = Environment(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_ECHO'] = True
@@ -20,7 +23,7 @@ css = Bundle('./css/styles.css',
             output='gen/styles.css')
 assets.register('css_all', css)
 
-class User( db.Model ):
+class User(  UserMixin, db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(100))
     lname = db.Column(db.String(100))
@@ -40,6 +43,10 @@ class User( db.Model ):
         self.picture = picture
         self.username = username
         self.password = password
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class Instructor( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
@@ -79,7 +86,7 @@ class Booking( db.Model ):
     location = db.Column(db.String(100)) # added "location", not on diagram
 
     # relationships
-    review = db.relationship( "Review", backref="booking" )
+    reviews = db.relationship( "Review", backref="booking" )
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
 
@@ -100,7 +107,7 @@ class Review( db.Model ):
                                      #though I am not sure if they need to be separate.
 
     # relationships
-    booking = db.relationship( "Booking", backref="review" )
+    #booking = db.relationship( "Booking", backref="review" )
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'))
 
@@ -121,39 +128,40 @@ def home():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 
-    if request.method == "Post":
-        username = request.form.get("username", "get")
-        password = request.form.get("password", "get")
+
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
 
         user = User.query.filter_by( username = username, password = password ).first()
 
         if user is not None:
-            session[ 'username' ] = username
+            login_user(user)
 
-            return redirect("dashboard.html")
+            return redirect("/dashboard")
         else:
+
             return redirect("/login")
 
     else:
+
         return render_template("login.html")
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
 
 @app.route("/signup")
 def register():
     return render_template("register.html")
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
 
-    if checkLogin():
+    return render_template("dashboard.html", user = current_user)
 
-        user = User.query.filter_by( username = session[ 'username' ] ).first()
-        return render_template("dashboard", user = user)
-
-def checkLogin():
-    if 'user' in session:
-        return True
-    else:
-        return redirect("/login")
 
 # CRUDI - Users Controller
 
@@ -175,7 +183,7 @@ def create_user():
     db.session.add(newUser)
     db.session.commit()
 
-    return redirect("/users/")
+    return redirect("/login/")
 
 @app.route("/users/<id>")
 def get_user(id):
