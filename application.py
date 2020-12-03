@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import hashlib
+import datetime
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -65,7 +66,7 @@ class Instructor( db.Model ):
 
 
 
-    def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location, booking, user):
+    def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location):
         self.fname = fname
         self.lname = lname
         self.bio = bio
@@ -74,8 +75,8 @@ class Instructor( db.Model ):
         self.video = video
         self.years_of_experience = years_of_experience
         self.location = location
-        self.booking = booking
-        self.user = user
+        #self.booking = booking
+        #self.user = user
 
 class Booking( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
@@ -119,7 +120,8 @@ class Review( db.Model ):
         self.booking = booking
 
 
-# Main Routes
+# MAIN ROUTES
+today = datetime.datetime.now()
 
 @app.route("/")
 def home():
@@ -156,11 +158,14 @@ def logout():
 def register():
     return render_template("register.html")
 
+@app.route("/teach")
+def registerInstructor():
+    return render_template("registerInstructor.html")
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
-
-    return render_template("dashboard.html", user = current_user)
+    return render_template("dashboard.html")
 
 
 # CRUDI - Users Controller
@@ -183,7 +188,7 @@ def create_user():
     db.session.add(newUser)
     db.session.commit()
 
-    return redirect("/login/")
+    return redirect("/login")
 
 @app.route("/users/<id>")
 def get_user(id):
@@ -231,11 +236,12 @@ def create_instructor():
     years_of_experience = request.form.get('years_of_experience', "")
     location = request.form.get('location', "")
 
+
     newInstructor = Instructor(fname, lname, bio, picture, category, video, years_of_experience, location)
     db.session.add(newInstructor)
     db.session.commit()
 
-    return redirect("/instructors/")
+    return redirect("/dashboard")
 
 @app.route("/instructors/<id>")
 def get_instructor(id):

@@ -7,13 +7,17 @@
         <div class="mx-auto text-center">
             <h1 class="mx-auto my-0 text-uppercase">Register</h1>
 
-            <form action="/users/create" method="Post">
+            <form action="/instructors/create" method="Post">
                 <input type="text" name="fname" placeholder="First Name" required="true"> <br>
                 <input type="text" name="lname" placeholder="Last Name" required="true"> <br>
                 <input type="text" name="picture" placeholder="Add a photo"> <br>
+                <input type="text" name="category" placeholder="What do you teach?"required="true"> <br>
                 <textarea name="bio" placeholder="About Me"></textarea> <br>
-                <input type="text" name="username" placeholder="Username" required="true"> <br>
-                <input type="text"  name="password" placeholder="Password" required="true"> <br>
+                <input type="text" name="video" placeholder="Upload a clip"> <br>
+                <input type="number" name="years_of_experience" placeholder="Years of Experience" min="0" max="50" required="true"> <br>
+                <input type="text" name="location" placeholder="Location"> <br>
+                <input type="text" name="username" placeholder="Username" required="true"><br>
+                <input type="text" name="password" placeholder="Password" required="true"> <br>
                 <input type="submit" value="register">
             </form>
 

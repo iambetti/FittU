@@ -5,21 +5,38 @@
 <header class="masthead">
     <div class="container d-flex h-30 align-items-center">
         <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Welcome {{ user.fname }}</h1>
+            <h1 class="mx-auto my-0 text-uppercase">Welcome {{ current_user.fname }}</h1>
 
            <!---<a href="/users">list of users</a>-->
 
            <div class="container">
                <div class="row">
                    <div class="col-12">
-                       <h3><b>{{user.fname}}</b></h3>
+                       <h2><b>{{ current_user.fname}}'s Bookings:</b></h2>
                    </div>
                </div>
                <div class="row">
-                   {%if _______ %}
 
+                   <!-- user's bookings -->
+
+                   {%if current_user.booking | length > 0 %}
+
+                   <!-- loop through user bookings -->
 
                    {% else %}
+
+                   <div class="center_text">
+
+                       <h3>You have no bookings</h3>
+
+                       <button type="button" class="btn btn-info">Book now</button>
+
+                   </div>
+
+
+
+
+
 
                    {% endif %}
                </div>
