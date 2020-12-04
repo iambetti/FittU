@@ -22,6 +22,11 @@
                    {%if current_user.booking | length > 0 %}
 
                    <!-- loop through user bookings -->
+                       {% for booking in current_user.bookings %}
+
+                        <!-- add a card from bootstrap -->
+
+                       {% endfor %}
 
                    {% else %}
 
@@ -29,13 +34,10 @@
 
                        <h3>You have no bookings</h3>
 
-                       <button type="button" class="btn btn-info">Book now</button>
+                       <button type="button"><a class="btn btn-info" href="/#portfolio">Book now</button> <br>
+                       <button type="button"><a class="btn btn-info" href="/logout">Log Out</a></button>
 
                    </div>
-
-
-
-
 
 
                    {% endif %}

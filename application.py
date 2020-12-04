@@ -49,7 +49,7 @@ class User(  UserMixin, db.Model ):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-class Instructor( db.Model ):
+class Instructor(db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(100))
     lname = db.Column(db.String(100))
@@ -59,6 +59,8 @@ class Instructor( db.Model ):
     video = db.Column(db.String(100))
     years_of_experience = db.Column(db.Integer)
     location = db.Column(db.String(100))
+    username = db.Column(db.String(10))
+    password = db.Column(db.String(20))
 
     # relationships
     booking = db.relationship( "Booking", backref="instructor" )
@@ -66,7 +68,8 @@ class Instructor( db.Model ):
 
 
 
-    def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location):
+
+    def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location, username, password):
         self.fname = fname
         self.lname = lname
         self.bio = bio
@@ -75,8 +78,11 @@ class Instructor( db.Model ):
         self.video = video
         self.years_of_experience = years_of_experience
         self.location = location
+        self.username = username
+        self.password = password
         #self.booking = booking
         #self.user = user
+
 
 class Booking( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
@@ -153,6 +159,8 @@ def login():
 @login_required
 def logout():
     logout_user()
+
+    return redirect("/")
 
 @app.route("/signup")
 def register():
@@ -235,9 +243,11 @@ def create_instructor():
     video = request.form.get('video', "")
     years_of_experience = request.form.get('years_of_experience', "")
     location = request.form.get('location', "")
+    username = request.form.get('username', "")
+    password = request.form.get('password', "")
 
 
-    newInstructor = Instructor(fname, lname, bio, picture, category, video, years_of_experience, location)
+    newInstructor = Instructor(fname, lname, bio, picture, category, video, years_of_experience, location, username, password)
     db.session.add(newInstructor)
     db.session.commit()
 
