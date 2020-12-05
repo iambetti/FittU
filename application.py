@@ -11,6 +11,7 @@ app.secret_key = "sasjdn214jnxc2mf039"
 assets = Environment(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = "signmeup"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_ECHO'] = True
@@ -35,6 +36,7 @@ class User(  UserMixin, db.Model ):
     # relationships
     booking = db.relationship( "Booking", backref="user" )
     review = db.relationship( "Review", backref="user" )
+    instructor = db. relationship ("Instructor", backref ="user")
 
 
     def __init__(self, fname, lname, bio, picture, username, password):
@@ -59,8 +61,8 @@ class Instructor(db.Model ):
     video = db.Column(db.String(100))
     years_of_experience = db.Column(db.Integer)
     location = db.Column(db.String(100))
-    username = db.Column(db.String(10))
-    password = db.Column(db.String(20))
+    #username = db.Column(db.String(10))
+    #password = db.Column(db.String(20))
 
     # relationships
     booking = db.relationship( "Booking", backref="instructor" )
@@ -68,8 +70,7 @@ class Instructor(db.Model ):
 
 
 
-
-    def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location, username, password):
+    def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location, user): #username, password):
         self.fname = fname
         self.lname = lname
         self.bio = bio
@@ -78,19 +79,21 @@ class Instructor(db.Model ):
         self.video = video
         self.years_of_experience = years_of_experience
         self.location = location
-        self.username = username
-        self.password = password
+        #self.username = username
+        #self.password = password
         #self.booking = booking
-        #self.user = user
+        self.user = user
 
 
 class Booking( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(100))
-    start_time = db.Column(db.String(100))
-    end_time = db.Column(db.Text())
-    price= db.Column(db.String(100))
-    location = db.Column(db.String(100)) # added "location", not on diagram
+    category = db.Column(db.String(50))
+    date = db.Column(db.DateTime, nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    price= db.Column(db.Integer)
+    location = db.Column(db.String(50)) # added "location", not on diagram
+
 
     # relationships
     reviews = db.relationship( "Review", backref="booking" )
@@ -98,7 +101,8 @@ class Booking( db.Model ):
     instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
 
 
-    def __init__(self, date, start_time, end_time, price, location, user, instructor):
+    def __init__(self, category, date, start_time, end_time, price, location, reviews, current_user, instructor):
+        self.category = category
         self.date = date
         self.start_time = start_time
         self.end_time = end_time
@@ -167,6 +171,7 @@ def register():
     return render_template("register.html")
 
 @app.route("/teach")
+@login_required
 def registerInstructor():
     return render_template("registerInstructor.html")
 
@@ -243,11 +248,11 @@ def create_instructor():
     video = request.form.get('video', "")
     years_of_experience = request.form.get('years_of_experience', "")
     location = request.form.get('location', "")
-    username = request.form.get('username', "")
-    password = request.form.get('password', "")
+    #username = request.form.get('username', "")
+    #password = request.form.get('password', "")
 
 
-    newInstructor = Instructor(fname, lname, bio, picture, category, video, years_of_experience, location, username, password)
+    newInstructor = Instructor(fname, lname, bio, picture, category, video, years_of_experience, location, current_user)#username, password
     db.session.add(newInstructor)
     db.session.commit()
 
@@ -306,6 +311,8 @@ def create_booking():
     db.session.commit()
 
     return redirect("/book/")
+
+   # user = User.query.filter_by( username = username, password = password ).first()
 
 @app.route("/booking/<id>")
 def get_booking(id):
@@ -377,7 +384,9 @@ def delete_review(id):
     db.session.commit()
     return redirect("reviews")
 
-
+@app.route("/signmeup")
+def signmeup():
+    return render_template("signmeup.html")
 
 
 if __name__ == "__main__":

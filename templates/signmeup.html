@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">Please Log in or Sign Up</h1>
+
+            <form action="/login" method="Post">
+                <input type="text" name="username" placeholder="Username">
+                <input type="text" name="password" placeholder="Password">
+                <input type="submit" value="login">
+            </form>
+
+            <!---add link to signup page> -->
+
+
+             <button type="button"><a class="btn btn-info" href="/signup">Sign Up</a></button>
+
+
+
+
+        </div>
+    </div>
+</header>
+
+{% endblock %}

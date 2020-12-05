@@ -1,0 +1,112 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">book a class</h1>
+
+            <form action="/bookings/create" method="Post">
+                <input type="date" name="date" placeholder="Date" required="true"> <br>
+                <input type="time" name="start_time" placeholder="Start Time" required="true"> <br>
+                <input type="time" name="end_time" placeholder="End Time "required="true"> <br>
+                <input type="number" name="price" placeholder="Price" min="0"> <br>
+                <input type="text" name="location" placeholder="Location"> <br>
+                <input type="submit" value="book">
+            </form>
+
+
+        </div>
+    </div>
+</header>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!--<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking</title>
+<link rel="stylesheet" href="css/style.css">
+<!-- Font -->
+
+<!--
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700,900" rel="stylesheet">
+</head>
+<body>
+
+
+<div class="container-form">
+<form action="#">
+<h2 class="heading heading-yellow">Book Your Trainer</h2>
+
+<div class="form-field">
+<p>Your Name</p>
+<input type="text" placeholder="Your Name">
+</div>
+<div class="form-field">
+<p>Last Name</p>
+<input type="text" placeholder="Last Name">
+</div>
+<div class="form-field">
+<p>Date</p>
+<input type="date">
+</div>
+<div class="form-field">
+<p>Time</p>
+<input type="time">
+<div class="form-field">
+<p>Location</p>
+<input type="text" placeholder="Location">
+</div>
+<div class="form-field">
+<p>Comments</p>
+<input type="text" placeholder="Comments">
+</div>
+
+
+<button class="btn">Submit</button>
+</form>
+</div>
+</div>
+
+
+</body>
+</html> -->
