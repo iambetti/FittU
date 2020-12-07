@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import hashlib
-import datetime
+from datetime import datetime
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -33,6 +33,7 @@ class User(  UserMixin, db.Model ):
     picture = db.Column(db.String(100))
     username = db.Column(db.String(10))
     password = db.Column(db.String(20))
+
     # relationships
     booking = db.relationship( "Booking", backref="user" )
     review = db.relationship( "Review", backref="user" )
@@ -88,9 +89,9 @@ class Instructor(db.Model ):
 class Booking( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(50))
-    date = db.Column(db.DateTime, nullable=False)
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.String(100))
+    start_time = db.Column(db.String(100))
+    end_time = db.Column(db.String(100))
     price= db.Column(db.Integer)
     location = db.Column(db.String(50)) # added "location", not on diagram
 
@@ -101,7 +102,7 @@ class Booking( db.Model ):
     instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
 
 
-    def __init__(self, category, date, start_time, end_time, price, location, reviews, current_user, instructor):
+    def __init__(self, category, date, start_time, end_time, price, location, user):
         self.category = category
         self.date = date
         self.start_time = start_time
@@ -109,13 +110,13 @@ class Booking( db.Model ):
         self.price = price
         self.location = location
         self.user = user
-        self.instructor = instructor
+       #self.instructor = instructor
+         #self.review - review
 
 class Review( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer)
-    comments = db.Column(db.Text()) # I also added this, to keep review as an Integer, and optional comments about the review.
-                                     #though I am not sure if they need to be separate.
+    comments = db.Column(db.Text())
 
     # relationships
     #booking = db.relationship( "Booking", backref="review" )
@@ -131,7 +132,8 @@ class Review( db.Model ):
 
 
 # MAIN ROUTES
-today = datetime.datetime.now()
+#today = datetime.datetime.now()
+#datetime.strptime('2015-01-02T00:00', '%Y-%m-%dT%H:%M')
 
 @app.route("/")
 def home():
@@ -179,6 +181,16 @@ def registerInstructor():
 @login_required
 def dashboard():
     return render_template("dashboard.html")
+
+@app.route("/book")
+@login_required
+def createAbooking():
+    return render_template("bookings.html")
+
+
+@app.route("/bookingcomplete")
+def bookingcomplete():
+        return render_template("bookingcomplete.html")
 
 
 # CRUDI - Users Controller
@@ -300,17 +312,18 @@ def all_bookings():
 
 @app.route("/bookings/create", methods=["POST"])
 def create_booking():
+    category = request.form.get('category', "")
     date = request.form.get('date', "")
     start_time = request.form.get('start_time', "")
     end_time = request.form.get('end_time', "")
     price = request.form.get('price', "")
     location = request.form.get('location', "")
 
-    newBooking = Booking(date, start_time, end_time, price, location)
+    newBooking = Booking(category, date, start_time, end_time, price, location, current_user)
     db.session.add(newBooking)
     db.session.commit()
 
-    return redirect("/book/")
+    return redirect("/book")
 
    # user = User.query.filter_by( username = username, password = password ).first()
 
@@ -339,7 +352,7 @@ def delete_booking(id):
     booking = Booking.query.get( int(id) )
     db.session.delete(booking)
     db.session.commit()
-    return redirect("book")
+    return redirect("bookingcomplete")
 
 
 #CRUDI Review

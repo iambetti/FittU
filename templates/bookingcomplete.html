@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="dashboard container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="bookingcomplete">Go to your Bookings</a> <!--original href was #services then portfolio-->
+        </div>
+        </header>
+
+            <h1 class="mx-auto my-0 text-uppercase">Thank you for booking a class,{{ current_user.fname }}!</h1>
+
+           <!---<a href="/users">list of users</a>-->
+
+           <div class="container">
+               <div class="row">
+                   <div class="col-12">
+                       <h2><b>{{ current_user.fname}}'s Bookings: One of our incredible instructors will soon contact you!</b></h2>
+                   </div>
+               </div>
+               <div class="row">
+
+                   <!-- user's bookings -->
+
+                  
+                       
+-->
+
+                       {% endfor %}
+
+                   {% else %}
+
+                  
+                   {% endif %}
+
+                   <button type="button"><a class="btn btn-info" href="/bookings/create">Return to your bookings</button> <br>
+               </div>
+           </div>
+
+        </div>
+    </div>
+</header>
+
+{% endblock %}
