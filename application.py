@@ -185,7 +185,7 @@ def dashboard():
 @app.route("/book")
 @login_required
 def createAbooking():
-    return render_template("bookings.html")
+    return render_template("createBooking.html")
 
 
 @app.route("/bookingcomplete")
@@ -217,10 +217,14 @@ def create_user():
 
 @app.route("/users/<id>")
 def get_user(id):
-    user = User.query.get( int(id) )
-    return render_template("user.html", user = user)
+    print("=================================================")
+    print("Not here")
+    print(current_user.id)
+    print("=================================================")
+    user = current_user.id
+    return redirect("/")
 
-@app.route("/users/<id>/edit", methods=["GET", "POST"])
+@app.route("/users/edit", methods=["GET", "POST"])
 def edit_user(id):
     user = User.query.get( int(id) )
 
@@ -235,12 +239,16 @@ def edit_user(id):
     else:
         return render_template("edit_user.html", user = user)
 
-@app.route("/users/<id>/delete", methods=["POST"])
+@app.route("/users/delete", methods=["POST"])
 def delete_user(id):
-    user = User.query.get( int(id) )
+    print("=================================================")
+    print("got in")
+    print(id)
+    print("=================================================")
+    user = current_user.id
     db.session.delete(user)
     db.session.commit()
-    return redirect("users")
+    return redirect("/")
 
 
 # CRUDI Instructors Controller
@@ -275,9 +283,9 @@ def get_instructor(id):
     instructor = Instructor.query.get( int(id) )
     return render_template("instructor.html", instructor = instructor)
 
-@app.route("/instructors/<id>/edit", methods=["GET", "POST"])
+@app.route("/instructors/edit", methods=["GET", "POST"])
 def edit_instructor(id):
-    instructor = Instructor.query.get( int(id) )
+    instructor = Instructor.query.get(id)
 
     if request == "Post":
         instructor.fname = request.form.get('fname', "")
@@ -295,9 +303,10 @@ def edit_instructor(id):
     else:
         return render_template("edit_instructor.html", instructor = instructor)
 
-@app.route("/instructors/<id>/delete", methods=["POST"])
+@app.route("/instructors/delete", methods=["POST"])
 def delete_instructor(id):
-    instructor = Instructor.query.get( int(id) )
+
+    instructor = Instructor.query.get(int(id))
     db.session.delete(instructor)
     db.session.commit()
     return redirect("instructors")
@@ -305,7 +314,12 @@ def delete_instructor(id):
 
 #CRUDI Booking
 
-@app.route("/book")
+ #@app.route("/book")
+#def all_bookings():
+ #   allBookings = Booking.query.all()
+  #  return render_template("bookings.html", bookings = allBookings)
+
+@app.route("/bookings")
 def all_bookings():
     allBookings = Booking.query.all()
     return render_template("bookings.html", bookings = allBookings)
@@ -323,7 +337,7 @@ def create_booking():
     db.session.add(newBooking)
     db.session.commit()
 
-    return redirect("/book")
+    return redirect("/dashboard")
 
    # user = User.query.filter_by( username = username, password = password ).first()
 
