@@ -69,8 +69,6 @@ class Instructor(db.Model ):
     booking = db.relationship( "Booking", backref="instructor" )
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-
-
     def __init__(self, fname, lname, bio, picture, category, video, years_of_experience, location, user): #username, password):
         self.fname = fname
         self.lname = lname
@@ -102,7 +100,7 @@ class Booking( db.Model ):
     instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
 
 
-    def __init__(self, category, date, start_time, end_time, price, location, user):
+    def __init__(self, category, date, start_time, end_time, price, location,user):
         self.category = category
         self.date = date
         self.start_time = start_time
@@ -111,7 +109,7 @@ class Booking( db.Model ):
         self.location = location
         self.user = user
        #self.instructor = instructor
-         #self.review - review
+        #self.review - review
 
 class Review( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
@@ -119,9 +117,10 @@ class Review( db.Model ):
     comments = db.Column(db.Text())
 
     # relationships
-    #booking = db.relationship( "Booking", backref="review" )
+   # booking = db.relationship( "Booking", backref="review" )
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'))
+
 
     def __init__(self, rating, comments, user, booking):
 
@@ -132,7 +131,7 @@ class Review( db.Model ):
 
 
 # MAIN ROUTES
-#today = datetime.datetime.now()
+#today = datetime.now()
 #datetime.strptime('2015-01-02T00:00', '%Y-%m-%dT%H:%M')
 
 @app.route("/")
@@ -154,7 +153,7 @@ def login():
 
             return redirect("/dashboard")
         else:
-
+            flash("No user found")
             return redirect("/login")
 
     else:
@@ -215,45 +214,47 @@ def create_user():
 
     return redirect("/login")
 
-@app.route("/users/<id>")
-def get_user(id):
-    print("=================================================")
-    print("Not here")
-    print(current_user.id)
-    print("=================================================")
-    user = current_user.id
-    return redirect("/")
+#@app.route("/users/settings")
+#def get_user():
+#    print("=================================================")
+#    print("Not here")
+#    print(current_user.id)
+#    print("=================================================")
+#    user = current_user.id
+#    return redirect("/users/delete")
 
-@app.route("/users/edit", methods=["GET", "POST"])
-def edit_user(id):
-    user = User.query.get( int(id) )
+@app.route("/users/edit", methods=['GET', 'POST'])
+@login_required
+def edit_user():
+    user = User.query.get(int(current_user.id))
 
-    if request == "Post":
+    if request.method == "POST":
+
+
         user.fname = request.form.get('fname', "")
         user.lname = request.form.get('lname', "")
         user.bio = request.form.get('bio', "")
         user.picture = request.form.get('picture', "")
+        user.username = request.form.get('username', "")
         user.password = request.form.get('password', "")
         db.session.commit()
-        return render_template("user.html", user = user)
+        return render_template("dashboard.html", user = user)
     else:
-        return render_template("edit_user.html", user = user)
+        return render_template("editUser.html", user = user)
 
-@app.route("/users/delete", methods=["POST"])
-def delete_user(id):
-    print("=================================================")
-    print("got in")
-    print(id)
-    print("=================================================")
-    user = current_user.id
-    db.session.delete(user)
+@app.route("/users/delete", methods=['GET','POST'])
+@login_required
+def delete_user():
+
+    uID = int(current_user.id)
+    found_user = User.query.filter_by(id = uID).delete()
     db.session.commit()
     return redirect("/")
 
 
 # CRUDI Instructors Controller
 
-@app.route("/instructors")
+@app.route("/instructors", methods=['GET', 'POST'])
 def all_instructors():
     allInstructors = Instructor.query.all()
     return render_template("instructors.html", instructors = allInstructors)
@@ -287,7 +288,7 @@ def get_instructor(id):
 def edit_instructor(id):
     instructor = Instructor.query.get(id)
 
-    if request == "Post":
+    if request == "POST":
         instructor.fname = request.form.get('fname', "")
         instructor.lname = request.form.get('lname', "")
         instructor.bio = request.form.get('bio', "")
@@ -325,7 +326,9 @@ def all_bookings():
     return render_template("bookings.html", bookings = allBookings)
 
 @app.route("/bookings/create", methods=["POST"])
+@login_required
 def create_booking():
+
     category = request.form.get('category', "")
     date = request.form.get('date', "")
     start_time = request.form.get('start_time', "")
@@ -341,32 +344,40 @@ def create_booking():
 
    # user = User.query.filter_by( username = username, password = password ).first()
 
-@app.route("/booking/<id>")
-def get_booking(id):
-    booking = Booking.query.get( int(id) )
-    return render_template("booking.html", booking= booking)
+#@app.route("/booking/<id>")
+#def get_booking(id):
+#   booking = Booking.query.get( int(id) )
+#    return render_template("booking.html", booking= booking)
 
 @app.route("/booking/<id>/edit", methods=["GET", "POST"])
+@login_required
 def edit_booking(id):
-    booking = Booking.query.get( int(id) )
 
-    if request == "Post":
+    booking = Booking.query.get(int(id))
+
+    if request.method == "POST":
+
+        booking.category = request.form.get('category', "")
         booking.date = request.form.get('date', "")
         booking.start_time = request.form.get('start_time', "")
         booking.end_time = request.form.get('end_time', "")
         booking.price = request.form.get('price', "")
         booking.location = request.form.get('location', "")
         db.session.commit()
-        return render_template("booking.html", booking = booking)
+        return redirect("/dashboard")
     else:
-        return render_template("edit_booking.html", booking = booking)
+        return render_template("editBooking.html", booking = booking)
 
-@app.route("/bookings/<id>/delete", methods=["POST"])
+@app.route("/booking/<id>/delete", methods=["GET", "POST"])
+@login_required
 def delete_booking(id):
-    booking = Booking.query.get( int(id) )
-    db.session.delete(booking)
+
+
+    bookingID = id
+    found_booking = Booking.query.filter_by(id = bookingID).first()
+    db.session.delete(found_booking)
     db.session.commit()
-    return redirect("bookingcomplete")
+    return redirect("/dashboard")
 
 
 #CRUDI Review
@@ -376,16 +387,20 @@ def all_reviews():
     allReviews = Review.query.all()
     return render_template("reviews.html", reviews = allReviews)
 
-@app.route("/reviews/create", methods=["POST"])
-def create_review():
+@app.route("/reviews/<id>/create", methods=["GET","POST"])
+@login_required
+def create_review(id):
+
+    booking = Booking.query.get(int(id))
     rating = request.form.get('rating', "")
     comments = request.form.get('comments', "")
 
-    newReview = Review(rating, comments)
+
+    newReview = Review(rating, comments, current_user, booking)
     db.session.add(newReview)
     db.session.commit()
 
-    return redirect("/reviews/")
+    return redirect("/dashboard")
 
 @app.route("/reviews/<id>")
 def get_review(id):

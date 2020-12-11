@@ -5,15 +5,15 @@
 <header class="masthead">
     <div class="container d-flex h-30 align-items-center">
         <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Register</h1>
+            <h1 class="mx-auto my-0 text-uppercase">Register To Begin offering classes</h1><br><br>
 
             <form action="/instructors/create" method="Post">
                 <input type="text" name="fname" placeholder="First Name"class="form-control" required="true"> <br>
                 <input type="text" name="lname" placeholder="Last Name" class="form-control"required="true"> <br>
-                <input type="text" name="picture" placeholder="Add a photo"class="form-control"> <br>
+                <input type="text" name="picture" placeholder="Add a photo"class="form-control" required="true"> <br>
                 <input type="text" name="category" placeholder="What do you teach?" class="form-control"required="true"> <br>
                 <textarea name="bio" placeholder="About Me"class="form-control"></textarea> <br>
-                <input type="text" name="video" placeholder="Upload a clip"class="form-control"> <br>
+                <input type="text" name="video" placeholder="Upload a clip"class="form-control" required="true"> <br>
                 <input type="number" name="years_of_experience" placeholder="Years of Experience" min="0" max="50" class="form-control"required="true"> <br>
                 <input type="text" name="location" placeholder="Location"class="form-control"> <br>
                 <input type="submit"class="form-control" value="register">

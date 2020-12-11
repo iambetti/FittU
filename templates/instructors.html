@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="dashboard container d-flex h-30 align-items-center">
+     <div class="mx-auto text-center">
+        <h1 class="mx-auto my-0 text-uppercase">Meet Our Instructors</h1><br>
+
+
+                   <!-- Check for instructors -->
+                        {%if instructors != 'NULL' %}
+                   <!-- loop through instructors -->
+                       {% for instructor in instructors %}
+
+                    <!--instructor cards-->
+
+
+
+
+                    <div class="card" style="width: 16rem;">
+                        <img class="card-img-top" src={{instructor.picture}} alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{instructor.fname}} {{instructor.lname}}</h5>
+                                <p class="card-text">{{instructor.bio}}</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Category:  {{instructor.category}}</li>
+                                    <li class="list-group-item">Years of Experience:  {{instructor.years_of_experience}}</li>
+                                    <li class="list-group-item">Location:  {{instructor.location}}</li>
+                                    </ul>
+                                        <div class="card-body">
+                                        <a href={{instructor.video}} class="btn btn-outline-info btn-sm">Watch</a>
+                                        <a href="/book" class="btn btn-outline-info btn-sm">Book Now!</a>
+                                        </div>
+                                        </div>
+
+
+
+
+
+                       {% endfor %}
+</div>
+                   {% else %}
+
+                      <h3>There are no instructors available at the moment</h3>
+
+</div>
+                    </div>
+                   </div>
+
+                   {% endif %}
+
+</div>
+</div>
+</div>
+</div>
+</header>
+{% endblock %}

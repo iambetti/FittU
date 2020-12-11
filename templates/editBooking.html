@@ -1,0 +1,50 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">book a class</h1>
+
+            <form action="/booking/{{booking.id}}/edit" method="Post">
+               <!--<input type="text" name="category"></br>
+               <!-- <div style="padding-bottom: 18px;"><!--<br/>-->
+                  <!-- <select name="category" id="category" style="max-width : 450px;" class="form-control" required="true">
+                    <option>Yoga</option>
+                    <option>Hiit</option>
+                    <option>Cardio</option>
+                    <option>Pilates</option>
+                    <option>Zumba</option>
+                    <option>Personal Training</option>
+                    <option>Other</option>
+                    </select>
+                    </div>-->
+                <select id="category" name="category" class="form-control">
+                <option value="{{booking.category}}" selected >{{booking.category}}</option>
+                <option value="Yoga">Yoga</option>
+                <option value="Hiit">Hiit</option>
+                <option value="Cardio">Cardio</option>
+                <option value="Pilates">Pilates</option>
+                <option value="Zumba">Zumba</option>
+                <option value="Personal Training">Personal Training</option>
+                </select> <br>
+
+                <input type="date" name="date" placeholder="Date" value= "{{booking.date}}" required="true" class="form-control"> <br>
+                <input type="time" name="start_time" placeholder="Start Time" value= "{{booking.start_time}}" class="form-control" required="true"> <br>
+                <input type="time" name="end_time" placeholder="End Time" value= "{{booking.end_time}}" class="form-control" required="true"> <br>
+                <input type="number" name="price" placeholder="Price" value= "{{booking.price}}" class="form-control"min="0"> <br>
+                <input type="text" name="location" placeholder="Location" value= "{{booking.location}}" class="form-control"> <br>
+                <input type="submit" class="form-control" value="Update" window.location="/bookingcomplete.html">
+
+
+
+            </form>
+
+
+        </div>
+    </div>
+
+</header>
+{% endblock %}

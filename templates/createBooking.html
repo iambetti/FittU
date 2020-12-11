@@ -9,18 +9,7 @@
             <h1 class="mx-auto my-0 text-uppercase">book a class</h1>
 
             <form action="/bookings/create" method="Post">
-               <!--<input type="text" name="category"></br>
-               <!-- <div style="padding-bottom: 18px;"><!--<br/>-->
-                  <!-- <select name="category" id="category" style="max-width : 450px;" class="form-control" required="true">
-                    <option>Yoga</option>
-                    <option>Hiit</option>
-                    <option>Cardio</option>
-                    <option>Pilates</option>
-                    <option>Zumba</option>
-                    <option>Personal Training</option>
-                    <option>Other</option>
-                    </select>
-                    </div>-->
+
                 <select id="category" name="category" class="form-control">
                 <option value="Yoga">Yoga</option>
                 <option value="Hiit">Hiit</option>
@@ -34,11 +23,34 @@
                 <input type="time" name="start_time" placeholder="Start Time" class="form-control" required="true"> <br>
                 <input type="time" name="end_time" placeholder="End Time" class="form-control" required="true"> <br>
                 <input type="number" name="price" placeholder="Price" class="form-control"min="0"> <br>
-                <input type="text" name="location" placeholder="Location" class="form-control"> <br>
-                <input type="submit" class="form-control" value="Book Now!" window.location="/bookingcomplete.html">
+                <input type="text" name="location" placeholder="Location" class="form-control" required="true"> <br>
+             <!--   <input type="submit" class="form-control" data-toggle="modal" data-target="#bookedModal" value="Book Now!"> -->
 
+             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bookedModal" data-backdrop="static">Book now!</button>
 
+                    <div class="modal fade" id="bookedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title" id="exampleModalLabel">Confirm Booking</h5>
 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        Are you sure you want to book this class? If confirmed, an instructor will be in touch with you soon!
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+         <button type="submit" class="btn btn-primary">Confirm</button>
+
+      </div>
+    </div>
+  </div>
+</div>
             </form>
 
 
@@ -46,4 +58,21 @@
     </div>
 
 </header>
+
+
+
 {% endblock %}
+
+
+<!--<input type="text" name="category"></br>
+               <!-- <div style="padding-bottom: 18px;"><!--<br/>-->
+                  <!-- <select name="category" id="category" style="max-width : 450px;" class="form-control" required="true">
+                    <option>Yoga</option>
+                    <option>Hiit</option>
+                    <option>Cardio</option>
+                    <option>Pilates</option>
+                    <option>Zumba</option>
+                    <option>Personal Training</option>
+                    <option>Other</option>
+                    </select>
+                    </div>-->

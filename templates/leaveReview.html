@@ -1,0 +1,65 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">How Was this class?</h1>
+
+            <form action="/reviews/create" method="Post">
+               <!--<input type="text" name="category"></br>
+               <!-- <div style="padding-bottom: 18px;"><!--<br/>-->
+                  <!-- <select name="category" id="category" style="max-width : 450px;" class="form-control" required="true">
+                    <option>Yoga</option>
+                    <option>Hiit</option>
+                    <option>Cardio</option>
+                    <option>Pilates</option>
+                    <option>Zumba</option>
+                    <option>Personal Training</option>
+                    <option>Other</option>
+                    </select>
+                    </div>-->
+                <select id="rating" name="rating" class="form-control">
+                <option value="5 Stars">5 stars, Perfect!</option>
+                <option value="4 Stars">4 stars</option>
+                <option value="3 stars">3 stars</option>
+                <option value="2 stars">2 stars</option>
+                <option value="1 star">1 star</option>
+
+                </select> <br>
+
+                <textarea name="comments" placeholder="What else should everyone know about this class?"class="form-control"></textarea> <br>
+                <input type="submit" class="form-control" value="Book Now!" window.location="/bookingcomplete.html">
+
+            </form>
+
+
+        </div>
+    </div>
+
+</header>
+<!--
+<div class="modal" id= "modal0" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+-->
+{% endblock %}

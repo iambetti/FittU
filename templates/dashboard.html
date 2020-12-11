@@ -2,21 +2,17 @@
 
 {% block content %}
 
-
 <header class="masthead">
     <div class="dashboard container d-flex h-30 align-items-center">
-        <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Welcome {{ current_user.fname }}</h1>
-
-           <!---<a href="/users">list of users</a>-->
+     <div class="mx-auto text-center">
+        <h1 class="mx-auto my-0 text-uppercase">Welcome {{ current_user.fname }}</h1><br>
 
            <div class="container">
                <div class="row">
                    <div class="col-12">
-                       <h2><b>{{ current_user.fname}}'s Bookings:</b></h2>
+                       <h2><b>{{ current_user.fname}}'s Bookings:</b></h2><br><br>
                    </div>
-               </div>
-               <div class="row">
+                    <div class="row">
 
                    <!-- user's bookings -->
 
@@ -25,42 +21,94 @@
                    <!-- loop through user bookings -->
                        {% for booking in current_user.booking %}
 
-                        <!-- add a card from bootstrap -->
+                    <!--booking cards-->
 
-                        <!-- working but needs css, text is white and add card or better list-->
+                        <div class= "col-3">
+                            <div class="card booking-card" style="width: 14rem">
+                              <ul class="list-group list-group-flush">
+                                <li class="list-group-item">{{ booking.category }}</li>
+                                <li class="list-group-item">{{ booking.date }}  </li>
+                                <li class="list-group-item">From:{{ booking.start_time }}</li>
+                                <li class="list-group-item"> Until: {{ booking.end_time }}  </li>
+                                <li class="list-group-item">{{ booking.location }}</li>
 
-                        <div class= "col-3 ">
-                        <div class="card booking-card" style="width: 18rem">
-                          <ul class="list-group list-group-flush">
-                            <li class="list-group-item">{{ booking.category }}</li>
-                            <li class="list-group-item">{{ booking.date }}  </li>
-                            <li class="list-group-item">{{ booking.start_time }}</li>
-                            <li class="list-group-item">{{ booking.end_time }}  </li>
-                            <li class="list-group-item">{{ booking.location }}</li>
+                            <div class="card-body">
+                                <p>
+                                    <a href="/booking/{{booking.id}}/edit" class="btn btn-outline-info btn-sm">Edit</a>
+                                    <a href="/booking/{{booking.id}}/delete" class="btn btn-outline-info btn-sm">Delete</a>
+
+                                        <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#leaveReviewModal_{{booking.id}}">Rate</button>
+                                    </p>
+
+                                    <!-- Leave Review Modal -->
+
+                                       <div class="modal fade" id="leaveReviewModal_{{booking.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                            <form action="/reviews/{{booking.id}}/create" method="Post">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">How was this class?</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                              <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                          </div>
+                                                          <div class="modal-body">
+
+                                                    <select id="rating" name="rating" class="form-control">
+                                                    <option value="5 Stars">5 stars, Perfect!</option>
+                                                    <option value="4 Stars">4 stars</option>
+                                                    <option value="3 stars">3 stars</option>
+                                                    <option value="2 stars">2 stars</option>
+                                                    <option value="1 star">1 star</option>
+                                                    </select> <br>
+
+                                                    <textarea name="comments" placeholder="What else should everyone know about this class?"class="form-control"></textarea>
+                                                          </div>
+                                                          <div class="modal-footer">
+
+                                                            <button type="submit" class="btn btn-primary">Save Review</button>
+                                                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Review Later</button>
+                                                          </div>
+                                                        </div>
+                                                  </form>
+                                                      </div>
+                                                        </div>
+
+                                    <!-- end Modal-->
+
                          </ul>
+                        </div><br><br>
                         </div>
-                        </div>
-
 
                        {% endfor %}
-
+</div>
                    {% else %}
 
-                   <div class="center_text">
+                      <h3>You have no bookings</h3>
 
-                       <h3>You have no bookings</h3>
-
+</div>
+                    </div>
                    </div>
 
                    {% endif %}
+                    <div class="col-12"
+                    <h3>
+                 <!--       <button type = "button"><a class="btn btn-primary btn-lg" href="/book"></a> Book A Class </a><br>
+                        <button type="button"><a class="btn btn-info" href="/users/edit">Edit My Account</button>
+                        <button type="button"><a class="btn btn-info" href="/users/delete">Delete My Account</button> -->
 
-                   <button type="button"><a class="btn btn-info" href="/book">Book now</button> <br>
-               </div>
-           </div>
-                    <button type="button"><a class="btn btn-info" href="/users/delete">Delete User</button> <br>
-                    <button type="button"><a class="btn btn-info" href="/users/edit">Edit</button> <br>
-        </div>
-    </div>
+                        <a class="btn btn-primary btn-xl text-uppercase" href="/book">Book a Class</a><br><br>
+                        <a class="btn btn-info" href="/users/edit">Edit My Account</a><br><br>
+                        <a class="btn btn-info btn-sm" href="/users/delete">Delete My Account</a>
+
+
+                       </h3>
+                       </div>
+
+</div>
+</div>
+</div>
+</div>
 </header>
-
 {% endblock %}

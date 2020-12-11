@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="masthead">
+    <div class="container d-flex h-30 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">Edit User Info</h1>
+
+            <form action="/users/edit" method="Post">
+                <input type="text" name="fname" placeholder="First Name" value = "{{current_user.fname}}" class="form-control" required="true"> <br>
+                <input type="text" name="lname" placeholder="Last Name" value ="{{current_user.lname}}" class="form-control"required="true"> <br>
+                <input type="text" name="picture" placeholder="Add a photo" class="form-control"> <br>
+                <textarea name="bio" placeholder="About Me" value="{{current_user.bio}}"class="form-control"></textarea> <br>
+                <input type="text" name="username" placeholder="Username" value="{{current_user.username}}" class="form-control" required="true"> <br>
+                <input type="text"  name="password" placeholder="Password"value="{{current_user.password}}" class="form-control" required="true"> <br>
+                <input type="submit" class="form-control" value="Update">
+            </form>
+
+
+        </div>
+    </div>
+</header>
+
+{% endblock %}

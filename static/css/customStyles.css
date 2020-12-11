@@ -4,7 +4,7 @@
 
 .dashboard {
 
-    color: black !important;
+    color: white !important;
 }
 
 #mainNav.navbar-shrink {
@@ -13,3 +13,42 @@
     background-color: grey;
   }
 
+.btn-primary btn-lg {
+
+    background-color: transparent !important;
+}
+
+.list-group-item {
+
+    color: black !important;
+}
+
+.modal-body {
+
+    color: black !important;
+}
+
+.modal-title {
+    color: black !important;
+    margin:auto !important;
+    padding-left: 200px;
+
+}
+
+.modal-header {
+
+ text-align:center !important;
+
+}
+
+.close {
+    align-items: right;
+}
+
+.card-text {
+    color:black;
+}
+
+.card-title {
+    color:black;
+}
